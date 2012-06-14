@@ -38,8 +38,4 @@ object Responses extends Controller {
 
     Ok.stream(wordEnumerator)
   }
-  
-  def test() = Action {
-    TODO
-  }
 }
