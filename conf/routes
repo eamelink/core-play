@@ -18,6 +18,7 @@ GET		/websockets/logging controllers.WebSockets.logging()
 GET		/websockets/echo controllers.WebSockets.echo()
 GET		/websockets/counter controllers.WebSockets.counter()
 GET		/websockets/echo-and-counter controllers.WebSockets.echoAndCounter()
+GET		/websockets/cpu-load controllers.WebSockets.cpuLoad()
 
 GET		/twitter/stream controllers.Twitter.stream(keywords)
 
