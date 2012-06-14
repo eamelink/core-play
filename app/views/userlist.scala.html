@@ -1,0 +1,13 @@
+@(users: Seq[User])
+
+@main("User list") {
+  <h1>List of users</h1>
+  <ul>
+  @for(user <- users) {
+    <li>
+	   This user has name @user.name,  
+      and he is @user.age years old 
+    </li>
+  }
+  </ul>
+}

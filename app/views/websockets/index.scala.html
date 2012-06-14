@@ -1,0 +1,65 @@
+@() @views.html.main("Websockets test") {
+<script type="text/javascript">
+    $(function() {
+      
+      ws = null
+	  $('#connect').click(function(){
+		if(ws) {
+	      ws.close()
+		}
+		address = $('#address').val()
+		ws = new WebSocket(address);
+		ws.onopen = function() { 
+		  $('#disconnect, #message, #send').attr("disabled", false) 
+		  writeMessage("Connected")
+		}
+		ws.onclose = function() { 
+		  $('#disconnect, #message, #send').attr("disabled", true)
+		  writeMessage("Disconnected")
+		}
+		ws.onmessage = function(msg) {
+		  writeMessage(msg.data)
+		}
+	  })
+	  $('#disconnect').click(function(){
+		if(ws) {
+		  ws.close()
+		}
+	  })
+	  $('#send').click(function(){
+		if(ws) {
+		  msg = $('#message').val()
+		  writeMessage("--->" + msg)
+          ws.send(msg)
+		}
+	  })
+	  
+	  function writeMessage(msg) {
+    	$('#messages').append(msg + "\n").scrollTop($('#messages')[0].scrollHeight)
+      }
+    
+    
+    })
+  </script>
+
+</script>
+<div id="websocket-controls" class="side-column">
+	<p>
+		<label>Websocket Address</label> <input name="address" id="address" />
+	</p>
+	<p>
+		<button id="connect">Connect</button>
+		<button id="disconnect" disabled="disabled">Disconnect</button>
+	</p>
+	<p>
+		<label>Websocket Message</label>
+		<textarea id="message" disabled="disabled"></textarea>
+	</p>
+	<p>
+		<button id="send" disabled="disabled">Send</button>
+	</p>
+</div>
+<div class="main-column">
+	<textarea id="messages"></textarea>
+</div>
+}

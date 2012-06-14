@@ -1,0 +1,31 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.side-column {
+	width: 300px;
+	float: left;
+	background-color: #ccc;
+	border-right: 1px solid #666;
+	padding: 15px;
+}
+
+.side-column input {
+	width: 90%;
+}
+
+.side-column textarea {
+	height: 100px;
+	width: 90%;
+}
+
+.main-column {
+	float: left;
+	padding: 15px;
+}
+
+.main-column textarea {
+	width: 600px;
+	height: 400px;
+}
