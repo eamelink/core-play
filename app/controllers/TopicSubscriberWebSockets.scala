@@ -18,28 +18,6 @@ import management.ManagementFactory
 object TopicSubscriberWebSockets extends Controller {
 
   /**
-   * Actor messages
-   */
-  case class SubscribeTopic(topic:Topic, client:util.UUID)
-  case class UnsubscribeTopic(topic:Topic, client:util.UUID)
-
-  val subscribers = mutable.Map[util.UUID, mutable.Set[Topic]]()
-
-  /**
-   * Actor that manages clients and their subscriptions
-   */
-  class TopicActor extends Actor {
-    def receive = {
-      case SubscribeTopic(topic, client) => {
-        subscribers.getOrElseUpdate(client, mutable.Set[Topic]()).add(topic)
-      }
-      case UnsubscribeTopic(topic, client) => {
-        subscribers.getOrElseUpdate(client, mutable.Set[Topic]()).remove(topic)
-      }
-    }
-  }
-
-  /**
    * Topics - System load and Weather
    */
   trait Topic
@@ -58,23 +36,19 @@ object TopicSubscriberWebSockets extends Controller {
     }
   }
 
-  /**
-   * Akka actor bootstrap
-   */
-  val system = ActorSystem("CpuAndOrSystemLoad")
-  val topicActor = system.actorOf(Props[TopicActor], name = "topicActor")
-
-
   def topicSubscribers() = WebSocket.using[String] { request =>
 
-    val client = util.UUID.randomUUID()
+    /**
+     * Topics to which current client is subscribed to
+     */
+    val topics = mutable.Set[Topic]()
 
     /**
      * Prints topic updates to subscribed clients
      */
     val topicOut = Enumerator.fromCallback { () =>
       Promise.timeout({
-        Some(subscribers.getOrElse(client, Set()).mkString(" "))
+        Some(topics.mkString(" "))
       }, 3 seconds)
     }
 
@@ -93,8 +67,8 @@ object TopicSubscriberWebSockets extends Controller {
           Topic(topicName) match {
             case Some(topic) =>
               action match {
-                case "subscribe" => topicActor ! SubscribeTopic(topic, client)
-                case "unsubscribe" => topicActor ! UnsubscribeTopic(topic, client)
+                case "subscribe" => topics.add(topic)
+                case "unsubscribe" => topics.remove(topic)
                 case _ => // unknown action
               }
             case _ => // unknown topic
