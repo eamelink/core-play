@@ -7,6 +7,7 @@
 GET		/templates/index			controllers.Templates.index
 
 GET		/responses/simple-without-header controllers.Responses.simpleWithoutHeader()
+
 GET		/responses/simple-feeding controllers.Responses.simpleFeeding()
 GET		/responses/chunked-result controllers.Responses.chunkedResult()
 GET		/responses/imperative-chunked controllers.Responses.imperativeChunked()
@@ -18,6 +19,7 @@ GET		/websockets/logging controllers.WebSockets.logging()
 GET		/websockets/echo controllers.WebSockets.echo()
 GET		/websockets/counter controllers.WebSockets.counter()
 GET		/websockets/echo-and-counter controllers.WebSockets.echoAndCounter()
+GET		/websockets/cpu-info controllers.CpuInfoWebSocket.cpuLoadSender()
 
 GET		/twitter/stream controllers.Twitter.stream(keywords)
 
